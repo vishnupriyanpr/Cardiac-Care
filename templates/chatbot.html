@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Classifier Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Main Container Styles */
+        .container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3a8a, #0f766e);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Login Screen */
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .login-box h1 {
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group input:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .login-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .dashboard-header h1 {
+            color: white;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: #60a5fa;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            background: linear-gradient(135deg, #1e3a8a, #4f46e5);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-header h2 {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 20px;
+            border-radius: 20px;
+            margin: 8px 0;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-bubble.user {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-bubble.bot {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1f2937;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+        }
+
+        .chat-input input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ECG Interface */
+        .ecg-interface {
+            background: linear-gradient(135deg, #0f766e, #059669);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .ecg-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+            position: relative;
+        }
+
+        .ecg-header h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .ecg-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload-area {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: #60a5fa;
+            margin-bottom: 20px;
+        }
+
+        .upload-area p {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .analysis-result {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .analysis-result h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .result-item strong {
+            color: #60a5fa;
+        }
+
+        .result-item span {
+            color: white;
+        }
+
+        /* Registration Form */
+        .auth-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 0 auto;
+        }
+
+        .auth-form h2 {
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .auth-form input, .auth-form select {
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .auth-form input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .auth-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .link-button {
+            background: none;
+            border: none;
+            color: #60a5fa;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 1rem;
+            font-size: 14px;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        /* ECG Visualization */
+        .ecg-visualization {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ecg-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ef4444;
+            animation: ecgAnimation 4s infinite linear;
+        }
+
+        @keyframes ecgAnimation {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .ecg-peak {
+            position: absolute;
+            background: #ef4444;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        /* Patient Card */
+        .patient-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .patient-card h4 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .patient-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 5px 0;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+            
+            .login-box, .auth-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="container">
+        <div class="login-box">
+            <h1><i class="fas fa-heartbeat"></i> Heart Disease Classifier</h1>
+            <div class="login-form" id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" value="doctor">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" value="password">
+                </div>
+                <button class="login-btn" id="loginButton">
+                    <i class="fas fa-sign-in-alt"></i> Login to Portal
+                </button>
+                <button class="link-button" id="showRegisterBtn">Not registered? Register here</button>
+            </div>
+            
+            <div class="auth-form hidden" id="registerForm">
+                <h2>Register</h2>
+                <input type="text" placeholder="Full Name" id="regName">
+                <input type="text" placeholder="Username" id="regUsername">
+                <input type="email" placeholder="Email" id="regEmail">
+                <input type="text" placeholder="Phone Number" id="regPhone">
+                <input type="password" placeholder="Password" id="regPassword">
+                <input type="password" placeholder="Confirm Password" id="regConfirmPassword">
+                <select id="regGender">
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Prefer not to say</option>
+                </select>
+                <button onclick="registerUser()">Register</button>
+                <button class="link-button" id="showLoginBtn">Already registered? Login here</button>
+            </div>
+            
+            <p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 14px;">
+                Demo credentials: doctor / password
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="dashboard hidden">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-hospital"></i> Medical Dashboard</h1>
+            <p>Advanced Heart Disease Classification System</p>
+            <button class="back-btn" id="logoutBtn" style="position: absolute; top: 20px; right: 20px;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card" id="chatUnit">
+                <div class="service-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>AI Medical Assistant</h3>
+                <p>Get instant medical guidance and symptom analysis from our advanced AI assistant.</p>
+                <button class="login-btn" style="margin-top: 15px; padding: 10px 20px;">Start Chat</button>
+            </div>
+            
+            <div class="service-card" id="ecgUnit">
+                <div class="service-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>ECG Analysis</h3>
+                <p>Upload and analyze ECG readings with our advanced cardiac monitoring system.</p>
+                <button class="login-btn" style="margin-top: 15px; padding: 10px 20px;">Analyze ECG</button>
+            </div>
+            
+            <div class="service-card" id="patientRecords">
+                <div class="service-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Patient Records</h3>
+                <p>Access and manage comprehensive patient medical histories and treatment plans.</p>
+                <button class="login-btn" style="margin-top: 15px; padding: 10px 20px;">View Records</button>
+            </div>
+            
+            <div class="service-card" id="appointments">
+                <div class="service-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Appointments</h3>
+                <p>Schedule and manage patient appointments with integrated calendar system.</p>
+                <button class="login-btn" style="margin-top: 15px; padding: 10px 20px;">Schedule</button>
+            </div>
+        </div>
+        
+        <div style="max-width: 1200px; margin: 40px auto;">
+            <h3 style="color: white; margin-bottom: 20px; text-align: center;">Recent Patients</h3>
+            <div class="services-grid">
+                <div class="patient-card">
+                    <h4>John Smith</h4>
+                    <p><strong>Age:</strong> 58</p>
+                    <p><strong>Condition:</strong> Hypertension</p>
+                    <p><strong>Last Visit:</strong> 2023-10-15</p>
+                </div>
+                <div class="patient-card">
+                    <h4>Sarah Johnson</h4>
+                    <p><strong>Age:</strong> 45</p>
+                    <p><strong>Condition:</strong> Arrhythmia</p>
+                    <p><strong>Last Visit:</strong> 2023-10-10</p>
+                </div>
+                <div class="patient-card">
+                    <h4>Michael Brown</h4>
+                    <p><strong>Age:</strong> 62</p>
+                    <p><strong>Condition:</strong> Heart Failure</p>
+                    <p><strong>Last Visit:</strong> 2023-10-05</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Interface -->
+    <div id="chatInterface" class="chat-container hidden">
+        <div class="chat-header">
+            <button class="back-btn" id="chatBackBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-robot"></i> Medical AI Assistant</h2>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message-bubble bot">
+                <strong>Welcome to Heart Disease Classifier!</strong><br><br>
+                I'm your AI medical assistant. You can describe your symptoms, ask about heart health, or request information about medications. How can I assist you today?
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Describe your symptoms or ask a medical question..." onkeypress="handleEnterKey(event)">
+            <button class="send-btn" id="sendButton">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ECG Interface -->
+    <div id="ecgInterface" class="ecg-interface hidden">
+        <div class="ecg-header">
+            <button class="back-btn" id="ecgBackBtn" style="position: absolute; top: 20px; left: 20px;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2><i class="fas fa-heartbeat"></i> ECG Analysis System</h2>
+            <p style="color: rgba(255,255,255,0.8);">Upload and analyze electrocardiogram data</p>
+        </div>
+        
+        <div class="ecg-content">
+            <div class="ecg-visualization">
+                <div class="ecg-line"></div>
+            </div>
+            
+            <div class="upload-area" onclick="document.getElementById('ecgUpload').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Upload your ECG file for analysis</p>
+                <p style="font-size: 14px; opacity: 0.8;">Supported formats: PDF, JPG, PNG</p>
+                <button class="upload-btn">Choose File</button>
+            </div>
+            
+            <input type="file" id="ecgUpload" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+            
+            <div id="ecgAnalysis" class="analysis-result">
+                <h3><i class="fas fa-chart-line"></i> Analysis Results</h3>
+                <div id="analysisContent">
+                    <div class="result-item">
+                        <strong>Status:</strong> <span>No ECG uploaded yet</span>
+                    </div>
+                    <div class="result-item">
+                        <strong>Instructions:</strong> 
+                        <span>Upload an ECG file to get detailed analysis of heart rhythm and potential abnormalities.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let state = {
+            currentView: 'login',
+            isLoggedIn: false,
+            currentUser: null
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Login functionality
+            document.getElementById('loginButton').addEventListener('click', handleLogin);
+            document.getElementById('showRegisterBtn').addEventListener('click', showRegisterForm);
+            document.getElementById('showLoginBtn').addEventListener('click', showLoginForm);
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+            // Dashboard navigation
+            document.getElementById('chatUnit').addEventListener('click', showChatInterface);
+            document.getElementById('ecgUnit').addEventListener('click', showECGInterface);
+            document.getElementById('patientRecords').addEventListener('click', () => showNotification('Patient Records feature coming soon!'));
+            document.getElementById('appointments').addEventListener('click', () => showNotification('Appointments feature coming soon!'));
+
+            // Back buttons
+            document.getElementById('chatBackBtn').addEventListener('click', showDashboard);
+            document.getElementById('ecgBackBtn').addEventListener('click', showDashboard);
+
+            // Chat functionality
+            document.getElementById('sendButton').addEventListener('click', sendMessage);
+            
+            // ECG functionality
+            document.getElementById('ecgUpload').addEventListener('change', handleECGUpload);
+
+            // Generate ECG visualization
+            generateECGPeaks();
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'doctor' && password === 'password') {
+                state.isLoggedIn = true;
+                state.currentUser = username;
+                showDashboard();
+                showNotification('Login successful! Welcome to the portal.');
+            } else {
+                showNotification('Invalid credentials. Use doctor/password for demo.');
+            }
+        }
+
+        function handleLogout() {
+            state.isLoggedIn = false;
+            state.currentUser = null;
+            showLoginScreen();
+            showNotification('Logged out successfully.');
+        }
+
+        function showRegisterForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+
+        function showLoginForm() {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        }
+
+        function registerUser() {
+            const name = document.getElementById('regName').value;
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (!name || !username || !email || !password) {
+                showNotification('Please fill in all fields.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match.');
+                return;
+            }
+
+            showNotification('Registration successful! You can now login.');
+            showLoginForm();
+        }
+
+        function showLoginScreen() {
+            hideAllScreens();
+            document.getElementById('loginScreen').classList.remove('hidden');
+            state.currentView = 'login';
+        }
+
+        function showDashboard() {
+            if (!state.isLoggedIn) {
+                showNotification('Please login first.');
+                return;
+            }
+            hideAllScreens();
+            document.getElementById('dashboard').classList.remove('hidden');
+            state.currentView = 'dashboard';
+        }
+
+        function showChatInterface() {
+            hideAllScreens();
+            document.getElementById('chatInterface').classList.remove('hidden');
+            state.currentView = 'chat';
+        }
+
+        function showECGInterface() {
+            hideAllScreens();
+            document.getElementById('ecgInterface').classList.remove('hidden');
+            state.currentView = 'ecg';
+        }
+
+        function hideAllScreens() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('chatInterface').classList.add('hidden');
+            document.getElementById('ecgInterface').classList.add('hidden');
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+
+            addMessageToChat('user', message);
+            messageInput.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                addMessageToChat('bot', response);
+            }, 1000);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessageToChat(sender, message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-bubble ${sender}`;
+            messageDiv.innerHTML = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateAIResponse(userMessage) {
+            const responses = {
+                chest: "Chest pain can have various causes. If you're experiencing severe chest pain, please seek immediate medical attention. Common causes include muscle strain, acid reflux, or cardiac issues. Can you describe the type of pain and when it occurs?",
+                heart: "Heart-related symptoms should always be taken seriously. Common signs include chest pain, shortness of breath, irregular heartbeat, and fatigue. If you're experiencing any severe symptoms, please consult a healthcare provider immediately.",
+                pain: "Pain symptoms vary greatly. For chest pain specifically, note the location, intensity, duration, and any triggers. If it's severe or accompanied by other symptoms like shortness of breath, seek medical attention.",
+                medication: "I can provide general information about medications, but always consult with your healthcare provider before starting, stopping, or changing any medications. What specific medication would you like to know about?",
+                blood: "Blood pressure monitoring is crucial for heart health. Normal blood pressure is typically below 120/80 mmHg. High blood pressure often has no symptoms but increases heart disease risk. Regular monitoring and lifestyle changes can help manage it.",
+                exercise: "Regular exercise is excellent for heart health! Start slowly and gradually increase intensity. Aim for 150 minutes of moderate exercise weekly. Always consult your doctor before starting a new exercise program, especially if you have existing heart conditions.",
+                diet: "A heart-healthy diet includes fruits, vegetables, whole grains, lean proteins, and healthy fats like those in fish and nuts. Limit sodium, saturated fats, and processed foods. The Mediterranean diet is particularly beneficial for heart health.",
+                smoking: "Smoking significantly increases heart disease risk. Quitting smoking is one of the best things you can do for your heart health. There are many resources and medications available to help with smoking cessation.",
+                stress: "Chronic stress can negatively impact heart health. Stress management techniques include regular exercise, meditation, deep breathing, adequate sleep, and maintaining social connections. Consider talking to a counselor if stress feels overwhelming.",
+                diabetes: "Diabetes and heart disease are closely linked. Managing blood sugar levels through diet, exercise, and medication (if prescribed) is crucial. Regular monitoring and working closely with your healthcare team is important.",
+                symptoms: "Common heart disease symptoms include chest pain, shortness of breath, fatigue, irregular heartbeat, swelling in legs/feet, and dizziness. However, some people may have no symptoms. Regular check-ups are important for early detection."
+            };
+
+            const lowerMessage = userMessage.toLowerCase();
+            
+            for (let key in responses) {
+                if (lowerMessage.includes(key)) {
+                    return responses[key];
+                }
+            }
+        }
+
+        function handleECGUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Simulate file analysis
+            const analysisContent = document.getElementById('analysisContent');
+            analysisContent.innerHTML = `
+                <div class="result-item">
+                    <strong>File:</strong> <span>${file.name}</span>
+                </div>
+                <div class="result-item">
+                    <strong>Status:</strong> <span>Analyzing...</span>
+                </div>
+            `;
+
+            // Simulate processing delay
+            setTimeout(() => {
+                const mockResults = generateMockECGAnalysis();
+                analysisContent.innerHTML = mockResults;
+                showNotification('ECG analysis completed!');
+            }, 3000);
+        }
+
+        function generateMockECGAnalysis() {
+            const results = [
+                {
+                    label: "Heart Rate",
+                    value: "72 BPM",
+                    status: "Normal"
+                },
+                {
+                    label: "Rhythm",
+                    value: "Sinus Rhythm",
+                    status: "Normal"
+                },
+                {
+                    label: "PR Interval",
+                    value: "160 ms",
+                    status: "Normal"
+                },
+                {
+                    label: "QRS Duration",
+                    value: "95 ms",
+                    status: "Normal"
+                },
+                {
+                    label: "QT Interval",
+                    value: "420 ms",
+                    status: "Normal"
+                },
+                {
+                    label: "Overall Assessment",
+                    value: "Normal ECG",
+                    status: "No abnormalities detected"
+                }
+            ];
+
+            let html = '';
+            results.forEach(result => {
+                const statusColor = result.status === "Normal" || result.status === "No abnormalities detected" ? "#10b981" : "#ef4444";
+                html += `
+                    <div class="result-item">
+                        <strong>${result.label}:</strong> 
+                        <span>${result.value}</span>
+                        <br>
+                        <small style="color: ${statusColor};">${result.status}</small>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="result-item" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <strong>Recommendation:</strong> 
+                    <span>The ECG appears normal. Continue regular check-ups and maintain a healthy lifestyle. Consult your physician for any concerns.</span>
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateECGPeaks() {
+            const visualization = document.querySelector('.ecg-visualization');
+            const peaks = [
+                { left: '10%', height: '15px', width: '15px', top: '45%' },
+                { left: '25%', height: '20px', width: '20px', top: '40%' },
+                { left: '40%', height: '12px', width: '12px', top: '47%' },
+                { left: '55%', height: '18px', width: '18px', top: '42%' },
+                { left: '70%', height: '16px', width: '16px', top: '44%' },
+                { left: '85%', height: '22px', width: '22px', top: '38%' }
+            ];
+
+            peaks.forEach((peak, index) => {
+                setTimeout(() => {
+                    const peakElement = document.createElement('div');
+                    peakElement.className = 'ecg-peak';
+                    peakElement.style.left = peak.left;
+                    peakElement.style.top = peak.top;
+                    peakElement.style.width = peak.width;
+                    peakElement.style.height = peak.height;
+                    visualization.appendChild(peakElement);
+                }, index * 200);
+            });
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Additional utility functions
+        function formatTimestamp() {
+            return new Date().toLocaleString();
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function simulateDataProcessing() {
+            return new Promise(resolve => {
+                setTimeout(resolve, Math.random() * 2000 + 1000);
+            });
+        }
+
+        // Enhanced chat responses for medical queries
+        function getSpecializedResponse(message) {
+            const emergencyKeywords = ['emergency', 'urgent', 'severe', 'critical', 'help'];
+            const hasEmergencyKeyword = emergencyKeywords.some(keyword => 
+                message.toLowerCase().includes(keyword)
+            );
+
+            if (hasEmergencyKeyword) {
+                return `<strong style="color: #ef4444;">⚠️ IMPORTANT:</strong> If this is a medical emergency, please call emergency services immediately or go to the nearest emergency room. This system is for informational purposes only and cannot replace immediate medical care.`;
+            }
+
+            return null;
+        }
+
+        // Enhanced message handling
+        const originalSendMessage = sendMessage;
+        sendMessage = function() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+
+            addMessageToChat('user', message);
+            messageInput.value = '';
+
+            // Check for emergency keywords first
+            const emergencyResponse = getSpecializedResponse(message);
+            if (emergencyResponse) {
+                setTimeout(() => {
+                    addMessageToChat('bot', emergencyResponse);
+                }, 500);
+                return;
+            }
+
+            // Regular AI response
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                addMessageToChat('bot', response);
+            }, 1000);
+        };async function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+
+    // Add user message to chat
+    addMessageToChat('user', message);
+    messageInput.value = '';
+
+    // Add loading indicator
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'message-bubble bot';
+    loadingMsg.innerHTML = '<div class="loading"></div>';
+    document.getElementById('chatMessages').appendChild(loadingMsg);
+    
+    try {
+        // Call the Flask backend
+        const response = await fetch('http://127.0.0.1:5005/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symptoms: message })
+        });
+        
+        const data = await response.json();
+        
+        // Remove loading indicator
+        document.getElementById('chatMessages').removeChild(loadingMsg);
+        
+        // Format the response with sources if available
+        let reply = data.reply;
+        if (data.source_documents && data.source_documents.length > 0) {
+            reply += '<br><br><strong>References:</strong><ul>';
+            data.source_documents.forEach(source => {
+                reply += `<li>${source}</li>`;
+            });
+            reply += '</ul>';
+        }
+        
+        addMessageToChat('bot', reply);
+        
+    } catch (error) {
+        // Remove loading indicator and show error
+        document.getElementById('chatMessages').removeChild(loadingMsg);
+        addMessageToChat('bot', `Error: Could not connect to the medical assistant. Please try again later. (${error.message})`);
+    }
+}
+    </script>
+</body>
+</html>

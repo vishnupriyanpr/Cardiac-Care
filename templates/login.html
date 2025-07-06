@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heart Disease Classifier</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="landing-page" id="landing">
+    <div class="logo">Heart<span>AI</span></div>
+    <h1>Heart Disease Risk <span class="highlight">Classifier</span></h1>
+    <p>Our advanced AI-powered chatbot analyzes your symptoms and medical history to assess your risk of heart disease. Get instant, confidential insights to help you make informed decisions about your cardiovascular health.</p>
+    
+    <div class="features">
+      <div class="feature-card">
+        <i class="fas fa-heartbeat"></i>
+        <h3>Instant Analysis</h3>
+        <p>Get immediate feedback on your heart disease risk factors based on your symptoms and medical history.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-shield-alt"></i>
+        <h3>Secure & Private</h3>
+        <p>Your health data is encrypted and never shared without your consent.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-user-md"></i>
+        <h3>Clinically Validated</h3>
+        <p>Our algorithm is based on established medical research and guidelines.</p>
+      </div>
+    </div>
+    
+    <button class="cta-button" onclick="showLogin()">Get in Touch</button>
+  </div>
+
+  <div class="auth-form hidden" id="login">
+    <div class="logo">Heart<span>AI</span></div>
+    <h2>Login to HeartAI</h2>
+    <input type="email" placeholder="Email" id="loginEmail" required>
+    <input type="password" placeholder="Password" id="loginPassword" required>
+    <button onclick="loginUser()">Login</button>
+    <button class="link-button" onclick="showRegister()">Don't have an account? Register here</button>
+  </div>
+
+  <div class="auth-form hidden" id="register">
+    <div class="logo">Heart<span>AI</span></div>
+    <h2>Create Your Account</h2>
+    <input type="text" placeholder="Full Name" id="regName" required>
+    <input type="email" placeholder="Email" id="regEmail" required>
+    <input type="password" placeholder="Password" id="regPassword" required>
+    <input type="password" placeholder="Confirm Password" id="regConfirmPassword" required>
+    <label>Age:</label>
+    <input type="number" placeholder="Age" id="regAge" min="18" max="120" required>
+    <label>Gender:</label>
+    <select id="regGender" required>
+      <option value="">Select Gender</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+      <option>Prefer not to say</option>
+    </select>
+    <button onclick="registerUser()">Register</button>
+    <button class="link-button" onclick="showLogin()">Already have an account? Login here</button>
+  </div>
+
+  <div class="chat-container hidden" id="chat">
+    <div class="chat-header">
+      <i class="fas fa-heartbeat"></i> Heart Disease Classifier
+    </div>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Describe your symptoms (e.g., chest pain, shortness of breath)" />
+      <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* Add this to your existing styles.css */
+.error-message {
+    color: #ff4d4d !important;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 5px;
+    background-color: rgba(255, 77, 77, 0.1);
+    border-radius: 4px;
+  }
+  
+  .auth-form input.error {
+    border-color: #ff4d4d !important;
+  }
