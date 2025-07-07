@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Summary of Medical Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #020732f3, #07266acf);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .summary-box {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 900px;
+      max-height: 95vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section h3 {
+      font-size: 18px;
+      color: #072d58;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    .highlighted-text {
+      white-space: pre-line;
+      background-color: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      color: #111;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .summary-content {
+      background-color: #f6f9ff;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-line;
+      color: #111;
+      border: 1px solid #cde;
+    }
+
+    .export-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: block;
+      margin: 30px auto 10px auto;
+    }
+
+    .export-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .back-arrow {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      cursor: pointer;
+      background-color: white;
+      border-radius: 50%;
+      padding: 10px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .back-arrow:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="summary-box">
+    <div class="back-arrow" onclick="goBack()">&#8592;</div>
+
+    <h2>📄 Medical Report Summary</h2>
+
+    <div class="section">
+      <h3>📑 Extracted Text (with Medical Terms Highlighted)</h3>
+      <div class="highlighted-text">
+        {{ extracted_text|safe }}
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>📝 AI-Generated Summary</h3>
+      <div class="summary-content">
+        {{ summary }}
+      </div>
+    </div>
+
+    <!-- NEW: Export as PDF using form submission -->
+    <form method="POST" action="{{ url_for('export_pdf') }}">
+      <textarea name="extracted_text" style="display:none;">{{ extracted_text|safe }}</textarea>
+      <textarea name="summary" style="display:none;">{{ summary }}</textarea>
+      <button type="submit" class="export-btn">📥 Export to PDF</button>
+    </form>
+
+
+  </div>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>

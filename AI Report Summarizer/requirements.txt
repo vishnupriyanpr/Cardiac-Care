@@ -1,0 +1,9 @@
+flask==2.3.3
+flask-cors==4.0.0
+
+spacy==3.7.2
+scispacy==0.5.5
+pytesseract==0.3.10
+pdf2image==1.16.3
+Pillow==10.3.0
+regex==2024.4.16

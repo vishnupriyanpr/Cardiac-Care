@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Medical Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="upload-box">
+    <div class="back-arrow" onclick="goBack()">&#8592;</div>
+    <h1>Upload Medical Report</h1>
+    
+    <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+      <div class="drop-zone" id="drop-zone">
+        <div class="upload-icon" id="uploadIcon">
+          <img id="uploadGif" src="{{ url_for('static', filename='cloud_upload.gif') }}" alt="Upload Icon">
+        </div>
+        <div class="drop-text" id="dropText">Supported file formats: PDF, JPG, PNG</div>
+        <div class="drop-text">Drag and drop here or</div>
+        <label class="browse-btn" for="fileInput">Browse File</label>
+        <input type="file" name="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg"/>
+      </div>
+
+      <div class="status" id="statusText">No file selected</div>
+      <button type="submit" class="upload-button" id="uploadBtn">
+        <span class="icon upload">📁 Upload</span>
+        <span class="icon loader"></span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadGif = document.getElementById('uploadGif');
+    const dropText = document.getElementById('dropText');
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        document.getElementById('statusText').textContent = `Selected: ${fileInput.files[0].name}`;
+      }
+    });
+
+    uploadForm.addEventListener('submit', () => {
+      // Change the gif to loading.gif
+      uploadGif.src = "{{ url_for('static', filename='loading.gif') }}";
+      dropText.textContent = "Extracting and summarizing your report...";
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>
