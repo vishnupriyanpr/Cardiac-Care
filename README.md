@@ -83,7 +83,7 @@ Cardiac-Care/
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/your-username/cardiac-care.git
+git clone https://github.com/vishnupriyanpr/cardiac-care.git
 cd cardiac-care
 ```
 
